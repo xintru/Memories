@@ -7,12 +7,18 @@
   "scripts": {
     "start:dev": "webpack serve --mode development --env development --stats verbose",
     "build": "webpack --mode production --env production",
-    "lint": "eslint './src/**/*.{ts,tsx}' --quiet",
-    "lint:fix": "eslint './src/**/*.{ts,tsx}' --fix"
+    "lint": "eslint 'src/**/*.{ts,tsx}' --quiet",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix"
   },
   "dependencies": {
+    "@types/react-router-dom": "^5.1.6",
+    "apollo-server": "^2.19.0",
+    "dotenv": "^8.2.0",
+    "dotenv-webpack": "^5.1.0",
+    "graphql": "^15.4.0",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.2",

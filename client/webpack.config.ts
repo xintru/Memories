@@ -4,6 +4,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin'
 
+const Dotenv = require('dotenv-webpack')
+
 const webpackConfig = (env): Configuration => ({
   entry: './src/index.tsx',
   devServer: {
@@ -30,6 +32,7 @@ const webpackConfig = (env): Configuration => ({
     ],
   },
   plugins: [
+    new Dotenv(),
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
