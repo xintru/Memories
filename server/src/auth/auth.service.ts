@@ -1,20 +1,18 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserEntity } from './auth.entity'
 import { Repository } from 'typeorm'
-import * as jwt from 'jsonwebtoken'
-import { ConfigService } from '@nestjs/config'
+import { User } from './auth.model'
+import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
-    private configService: ConfigService,
+    @InjectRepository(User) private userRepo: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
-  createToken({ id, email }: UserEntity) {
-    const secret = this.configService.get<string>('JWT_SECRET')
-    return jwt.sign({ id, email }, secret)
+  createToken({ id, email }: User) {
+    return this.jwtService.sign({ id, email })
   }
 
   createUser(email: string) {

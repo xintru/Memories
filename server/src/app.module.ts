@@ -8,13 +8,10 @@ import { ConfigModule } from '@nestjs/config'
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      typePaths: ['./**/*.graphql'],
-      definitions: {
-        path: join(process.cwd(), 'src/graphql.ts'),
-        outputAs: 'class',
-      },
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
       context: ({ req }) => ({
-        headers: req.headers,
+        req,
       }),
     }),
     TypeOrmModule.forRoot({}),
