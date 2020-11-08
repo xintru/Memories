@@ -9,7 +9,7 @@ type AuthReturnData {
 
 type Mutation {
   login(email: String!, password: String!): AuthReturnData!
-  signup(confirmPassword: String!, email: String!, password: String!): String!
+  signup(confirmPassword: String!, email: String!, password: String!): AuthReturnData!
 }
 
 type Query {

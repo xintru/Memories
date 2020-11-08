@@ -17,8 +17,10 @@ export class AuthResolver {
 
   @Query((returns) => User)
   @UseGuards(GqlAuthGuard)
-  getUser(@CurrentUser('user') user: User) {
-    return this.authService.getUserByEmail(user.email)
+  async getUser(@CurrentUser('user') user: User) {
+    const userFromDb = await this.authService.getUserByEmail(user.email)
+    delete userFromDb.password
+    return userFromDb
   }
 
   @Mutation((returns) => AuthReturnData)
@@ -30,17 +32,29 @@ export class AuthResolver {
         HttpStatus.UNPROCESSABLE_ENTITY,
       )
     }
+    const isPasswordValid = await this.authService.comparePasswords(
+      password,
+      user.password,
+    )
+    if (!isPasswordValid) {
+      return new HttpException(
+        'User with this email does not exist or password is incorrect',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      )
+    }
+    const userWithoutPassword = { ...user }
+    delete userWithoutPassword.password
     const token = this.authService.createToken(user)
     return {
       tokenData: {
         token,
         expiresAt: this.configService.get('JWT_EXPIRES_AT'),
       },
-      user,
+      user: userWithoutPassword,
     }
   }
 
-  @Mutation((returns) => String)
+  @Mutation((returns) => AuthReturnData)
   async signup(@Args() { password, confirmPassword, email }: SignUpDto) {
     if (password !== confirmPassword) {
       return new HttpException(
@@ -48,6 +62,7 @@ export class AuthResolver {
         HttpStatus.UNPROCESSABLE_ENTITY,
       )
     }
+    const dbPassword = await this.authService.hashPassword(password)
     const existingUser = await this.authService.getUserByEmail(email)
     if (existingUser) {
       return new HttpException(
@@ -55,7 +70,16 @@ export class AuthResolver {
         HttpStatus.BAD_REQUEST,
       )
     }
-    const user = await this.authService.createUser(email)
-    return this.authService.createToken(user)
+    const user = await this.authService.createUser(email, dbPassword)
+    const userWithoutPassword = { ...user }
+    delete userWithoutPassword.password
+    const token = this.authService.createToken(user)
+    return {
+      tokenData: {
+        token,
+        expiresAt: this.configService.get('JWT_EXPIRES_AT'),
+      },
+      user: userWithoutPassword,
+    }
   }
 }
