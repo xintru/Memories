@@ -15,7 +15,7 @@ import { ConfigModule } from '@nestjs/config'
       }),
     }),
     TypeOrmModule.forRoot({}),
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '../../.env' }),
     AuthModule,
   ],
 })

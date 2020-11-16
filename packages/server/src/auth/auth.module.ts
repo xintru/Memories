@@ -13,7 +13,7 @@ import { PassportModule } from '@nestjs/passport'
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async () => ({
-        secretOrPrivateKey: process.env.JWT_SECRET,
+        secret: process.env.JWT_SECRET,
         signOptions: { expiresIn: process.env.JWT_EXPIRES_AT },
       }),
     }),

@@ -1,8 +1,8 @@
 import path from 'path'
-import webpack, { Configuration } from 'webpack'
+import webpack, {Configuration} from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin'
+import {TsconfigPathsPlugin} from 'tsconfig-paths-webpack-plugin'
 
 const Dotenv = require('dotenv-webpack')
 
@@ -32,7 +32,9 @@ const webpackConfig = (env): Configuration => ({
     ],
   },
   plugins: [
-    new Dotenv(),
+    new Dotenv({
+      path: "../../.env"
+    }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),

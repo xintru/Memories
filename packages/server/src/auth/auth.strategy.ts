@@ -14,6 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     })
   }
 
+  // todo fix 401
   async validate(user: User) {
     return user
   }

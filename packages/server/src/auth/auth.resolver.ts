@@ -2,11 +2,11 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { AuthService } from './auth.service'
 import { AuthReturnData, User } from './auth.model'
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common'
-import { GqlAuthGuard } from './auth.guard'
 import { CurrentUser } from '../shared/decorators/CurrentUser.decorator'
 import { ConfigService } from '@nestjs/config'
 import { LoginDto } from './dto/login.dto'
 import { SignUpDto } from './dto/signup.dto'
+import { GqlAuthGuard } from './auth.guard'
 
 @Resolver((of) => User)
 export class AuthResolver {
