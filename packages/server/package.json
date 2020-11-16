@@ -1,10 +1,14 @@
 {
-  "name": "server",
+  "name": "@memories/server",
   "version": "0.0.1",
   "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "author": "xintru",
+  "license": "MIT",
+  "workspaces": {
+    "nohoist": [
+      "ts-node"
+    ]
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
@@ -18,7 +22,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
@@ -32,6 +36,7 @@
     "apollo-server-express": "^2.19.0",
     "bcrypt": "^5.0.0",
     "class-validator": "^0.12.2",
+    "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "graphql-tools": "^7.0.1",
     "jsonwebtoken": "^8.5.1",
@@ -52,13 +57,7 @@
     "@types/node": "^14.14.6",
     "@types/passport-jwt": "^3.0.3",
     "@types/supertest": "^2.0.10",
-    "@typescript-eslint/eslint-plugin": "^4.6.1",
-    "@typescript-eslint/parser": "^4.6.1",
-    "eslint": "^7.12.1",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.6.3",
-    "prettier": "^2.1.2",
     "supertest": "^6.0.0",
     "ts-jest": "^26.4.3",
     "ts-loader": "^8.0.8",
