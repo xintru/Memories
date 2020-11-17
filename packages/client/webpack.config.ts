@@ -1,8 +1,8 @@
 import path from 'path'
-import webpack, {Configuration} from 'webpack'
+import webpack, { Configuration } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin'
-import {TsconfigPathsPlugin} from 'tsconfig-paths-webpack-plugin'
+import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin'
 
 const Dotenv = require('dotenv-webpack')
 
@@ -10,6 +10,7 @@ const webpackConfig = (env): Configuration => ({
   entry: './src/index.tsx',
   devServer: {
     stats: 'errors-only',
+    historyApiFallback: true,
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -29,11 +30,16 @@ const webpackConfig = (env): Configuration => ({
         },
         exclude: /dist/,
       },
+      {
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader',
+      },
     ],
   },
   plugins: [
     new Dotenv({
-      path: "../../.env"
+      path: path.join(__dirname, '../../.env'),
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',

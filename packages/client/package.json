@@ -5,7 +5,7 @@
   "author": "xintru",
   "license": "MIT",
   "scripts": {
-    "start:dev": "webpack serve --mode development --env development --stats verbose",
+    "start:dev": "webpack serve --port 3000 --mode development --env development --stats verbose",
     "build": "webpack --mode production --env production",
     "lint": "eslint 'src/**/*.{ts,tsx}' --quiet",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix"
@@ -18,19 +18,25 @@
     ]
   },
   "dependencies": {
-    "@types/react-router-dom": "^5.1.6",
-    "apollo-server": "^2.19.0",
+    "@apollo/client": "^3.2.6",
+    "@chakra-ui/react": "^1.0.0",
+    "@emotion/react": "^11.1.1",
+    "@emotion/styled": "^11.0.0",
     "dotenv": "^8.2.0",
     "dotenv-webpack": "^5.1.0",
+    "framer-motion": "^2.9.4",
     "graphql": "^15.4.0",
+    "graphql-tag": "^2.11.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hook-form": "^6.11.3",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.2",
     "@types/react": "^16.9.53",
-    "@types/react-dom": "^16.9.8",
+    "@types/react-dom": "^16.9.9",
+    "@types/react-router-dom": "^5.1.6",
     "@types/webpack": "^4.41.23",
     "@types/webpack-dev-server": "^3.11.0",
     "fork-ts-checker-webpack-plugin": "^5.2.0",
@@ -38,7 +44,7 @@
     "ts-loader": "^8.0.7",
     "ts-node": "^9.0.0",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
-    "typescript": "^4.0.3",
+    "typescript": "^4.1.0-beta",
     "webpack": "^5.2.0",
     "webpack-cli": "^4.1.0",
     "webpack-dev-server": "^3.11.0"

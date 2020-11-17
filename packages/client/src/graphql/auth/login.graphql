@@ -1,0 +1,11 @@
+mutation {
+    login(email: "mcPashtt@gmail.com", password: "123") {
+        user {
+            id
+        }
+        tokenData {
+            token
+            expiresAt
+        }
+    }
+}
