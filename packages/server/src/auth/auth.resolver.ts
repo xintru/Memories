@@ -48,7 +48,7 @@ export class AuthResolver {
     return {
       tokenData: {
         token,
-        expiresAt: this.configService.get('JWT_EXPIRES_AT'),
+        expiresAt: +this.configService.get('JWT_EXPIRES_AT'),
       },
       user: userWithoutPassword,
     }

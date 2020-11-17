@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common'
 import { GraphQLModule } from '@nestjs/graphql'
 import { join } from 'path'
-import { AuthModule } from './auth/auth.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
+import { AuthModule } from './auth/auth.module'
 
 @Module({
   imports: [
@@ -13,6 +13,10 @@ import { ConfigModule } from '@nestjs/config'
       context: ({ req }) => ({
         req,
       }),
+      cors: {
+        origin: `http://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`,
+        credentials: true,
+      },
     }),
     TypeOrmModule.forRoot({}),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../../.env' }),
