@@ -1,1 +1,1 @@
-My template for react app with typescript
+# Client part of Memories app.
