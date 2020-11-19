@@ -19,7 +19,7 @@ export class AuthService {
   }
 
   createUser(email: string, password: string) {
-    return this.userRepo.create({ email, password }).save()
+    return this.userRepo.create({ email, password, memories: [] }).save()
   }
 
   async hashPassword(password: string) {
