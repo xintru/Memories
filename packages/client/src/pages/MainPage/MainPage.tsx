@@ -1,15 +1,40 @@
-import React, { FC } from 'react'
-import { Box, Button, Center, Heading, HStack, VStack } from '@chakra-ui/react'
-import { useHistory } from 'react-router-dom'
-import { paths } from '../../routes/paths'
+import React, { FC, useState } from 'react'
+import {
+  Box,
+  Button,
+  Center,
+  Heading,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
+import { Login, Signup } from 'components/auth'
+import { useQuery } from '@apollo/client'
+import MeQuery from '../../graphql/auth/me.graphql'
 
 interface MainPageProps {}
 
 export const MainPage: FC<MainPageProps> = () => {
-  const history = useHistory()
+  const { onOpen, isOpen, onClose } = useDisclosure()
+  const [isLogin, setIsLogin] = useState(false)
+  const { data } = useQuery(MeQuery)
+  // TODO work with this data
+  console.log(data?.me.email)
 
-  const goToSignUpHandler = () => history.push(paths.SIGN_UP)
-  const goToLoginHandler = () => history.push(paths.LOGIN)
+  const openLoginModal = () => {
+    setIsLogin(true)
+    onOpen()
+  }
+
+  const openSignupModal = () => {
+    setIsLogin(false)
+    onOpen()
+  }
 
   return (
     <Center h="100vh">
@@ -20,7 +45,7 @@ export const MainPage: FC<MainPageProps> = () => {
             fontSize="8rem"
             fontFamily="Dancing Script"
             css={{
-              'line-height': '9.6rem !important',
+              lineHeight: '9.6rem !important',
             }}
           >
             Memories
@@ -31,7 +56,7 @@ export const MainPage: FC<MainPageProps> = () => {
             variant="outline"
             colorScheme="pink"
             size="lg"
-            onClick={goToSignUpHandler}
+            onClick={openSignupModal}
           >
             Sign up
           </Button>
@@ -39,12 +64,25 @@ export const MainPage: FC<MainPageProps> = () => {
             variant="outline"
             colorScheme="pink"
             size="lg"
-            onClick={goToLoginHandler}
+            onClick={openLoginModal}
           >
             Log in
           </Button>
         </HStack>
       </VStack>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{isLogin ? 'Login' : 'Sign up'}</ModalHeader>
+          <ModalBody>
+            {isLogin ? (
+              <Login onClose={onClose} />
+            ) : (
+              <Signup onClose={onClose} />
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Center>
   )
 }

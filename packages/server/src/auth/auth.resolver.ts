@@ -17,7 +17,7 @@ export class AuthResolver {
 
   @Query((returns) => User)
   @UseGuards(GqlAuthGuard)
-  async getUser(@CurrentUser('user') user: User) {
+  async me(@CurrentUser('user') user: User) {
     const userFromDb = await this.authService.getUserByEmail(user.email)
     delete userFromDb.password
     return userFromDb
