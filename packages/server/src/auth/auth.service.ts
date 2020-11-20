@@ -5,11 +5,15 @@ import { User } from './auth.model'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { ConfigService } from '@nestjs/config'
+import * as generator from 'generate-password'
+import { MailerService } from '@nestjs-modules/mailer'
+import { assemblePasswordEmail } from '../shared/helpers/assemblePasswordEmail'
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
+    private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -47,5 +51,16 @@ export class AuthService {
 
   getUserByEmail(email: string) {
     return this.userRepo.findOne({ email })
+  }
+
+  async sendNewPassword(email: string) {
+    const newPw = generator.generate({ length: 10, numbers: true })
+    const html = assemblePasswordEmail(newPw)
+    await this.mailerService.sendMail({
+      to: email,
+      from: this.configService.get('MAILER_FROM'),
+      subject: `Your new password`,
+      html,
+    })
   }
 }

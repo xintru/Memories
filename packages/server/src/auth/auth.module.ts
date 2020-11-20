@@ -6,6 +6,8 @@ import { User } from './auth.model'
 import { JwtStrategy } from './auth.strategy'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
+import { MailerModule } from '@nestjs-modules/mailer'
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
 
 @Module({
   imports: [
@@ -15,6 +17,21 @@ import { PassportModule } from '@nestjs/passport'
       useFactory: async () => ({
         secret: process.env.JWT_SECRET,
         signOptions: { expiresIn: +process.env.JWT_EXPIRES_AT },
+      }),
+    }),
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: process.env.MAILER_TRANSPORT,
+        defaults: {
+          from: process.env.MAILER_DEFAULTS,
+        },
+        template: {
+          dir: __dirname + '/templates',
+          adapter: new EjsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
       }),
     }),
   ],

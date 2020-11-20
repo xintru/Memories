@@ -82,4 +82,22 @@ export class AuthResolver {
       user: userWithoutPassword,
     }
   }
+
+  @Mutation(() => Boolean)
+  async forgotPassword(@Args('email') email: string) {
+    const user = await this.authService.getUserByEmail(email)
+    if (!user) {
+      return new HttpException(
+        'User with this email does not exist.',
+        HttpStatus.BAD_REQUEST,
+      )
+    }
+    try {
+      await this.authService.sendNewPassword(user.email)
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
 }
