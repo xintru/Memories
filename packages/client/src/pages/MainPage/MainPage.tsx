@@ -10,6 +10,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Text,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -51,21 +52,24 @@ export const MainPage: FC<MainPageProps> = () => {
             Memories
           </Heading>
         </Box>
+        <Box
+          mt="1rem"
+          mb="3rem"
+          fontFamily="Lato"
+          fontSize="1.75rem"
+          color="white"
+          fontWeight="bold"
+        >
+          <Text>
+            A place to store your bright memories and share them with close
+            people.
+          </Text>
+        </Box>
         <HStack spacing={4}>
-          <Button
-            variant="outline"
-            colorScheme="pink"
-            size="lg"
-            onClick={openSignupModal}
-          >
+          <Button variant="outline" size="lg" onClick={openSignupModal}>
             Sign up
           </Button>
-          <Button
-            variant="outline"
-            colorScheme="pink"
-            size="lg"
-            onClick={openLoginModal}
-          >
+          <Button variant="outline" size="lg" onClick={openLoginModal}>
             Log in
           </Button>
         </HStack>

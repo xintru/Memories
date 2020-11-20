@@ -12,6 +12,8 @@ class StorageService {
     return this._instance || (this._instance = new this())
   }
 
+  // remove comment when cookies will be introduced
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   set(storage: StorageTypes, name: string, data: any, ...other: any[]): void {
     if (storage === StorageTypes.LOCAL_STORAGE) {
       localStorage.setItem(name, JSON.stringify(data))
