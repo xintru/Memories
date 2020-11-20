@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { Memory } from './memory.model'
 import { User } from '../auth/auth.model'
+import { MemoryDto } from './dto/memory.dto'
 
 @Injectable()
 export class MemoryService {
@@ -11,15 +12,23 @@ export class MemoryService {
     private readonly memoryRepository: Repository<Memory>,
   ) {}
 
-  // getMemories(userId: string) {
-  //   this.userRepo.find()
-  // }
+  getUserMemories(userId: string) {
+    return this.memoryRepository.find({
+      where: (qb) => {
+        qb.where('Memory__user.id = :id', { id: userId })
+      },
+      relations: ['user'],
+    })
+  }
 
-  createMemory(user: User) {
+  getMemoryById(memoryId: string) {
+    return this.memoryRepository.findOne(memoryId, { relations: ['user'] })
+  }
+
+  createMemory(newMemoryData: MemoryDto, user: User) {
     return this.memoryRepository
       .create({
-        name: 'some shit',
-        description: 'also some shit',
+        ...newMemoryData,
         user: [user],
       })
       .save()
