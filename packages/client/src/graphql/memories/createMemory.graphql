@@ -1,0 +1,6 @@
+mutation($name: String!, $description: String!) {
+    createMemory(name: $name, description: $description) {
+        name
+        description
+    }
+}
