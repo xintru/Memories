@@ -50,7 +50,7 @@ export class AuthService {
   }
 
   getUserByEmail(email: string) {
-    return this.userRepo.findOne({ email })
+    return this.userRepo.findOne({ email }, { relations: ['memories'] })
   }
 
   async sendNewPassword(email: string) {
