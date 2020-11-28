@@ -5,15 +5,14 @@ import { User } from './auth.model'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcrypt'
 import { ConfigService } from '@nestjs/config'
-import * as generator from 'generate-password'
-import { MailerService } from '@nestjs-modules/mailer'
-import { assemblePasswordEmail } from '../shared/helpers/assemblePasswordEmail'
+import { MailService } from '../mail/mail.service'
+import { ChangePasswordDto } from './dto/changePassword.dto'
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
-    private readonly mailerService: MailerService,
+    private readonly mailService: MailService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -54,13 +53,22 @@ export class AuthService {
   }
 
   async sendNewPassword(email: string) {
-    const newPw = generator.generate({ length: 10, numbers: true })
-    const html = assemblePasswordEmail(newPw)
-    await this.mailerService.sendMail({
-      to: email,
-      from: this.configService.get('MAILER_FROM'),
-      subject: `Your new password`,
-      html,
-    })
+    await this.mailService.sendForgotPasswordEmail({ email })
+  }
+
+  async rewritePassword(user: User, newPwData: ChangePasswordDto) {
+    try {
+      const userFromDb = await this.getUserByEmail(user.email)
+      await this.jwtService.verify(newPwData.token, {
+        secret: process.env.JWT_MAIL_SECRET,
+      })
+      userFromDb.password = await this.hashPassword(newPwData.password)
+      return await userFromDb.save()
+    } catch (e) {
+      throw new HttpException(
+        'Could not change password, try again later!',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      )
+    }
   }
 }

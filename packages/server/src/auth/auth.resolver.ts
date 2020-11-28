@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config'
 import { LoginDto } from './dto/login.dto'
 import { SignUpDto } from './dto/signup.dto'
 import { GqlAuthGuard } from './auth.guard'
+import { ChangePasswordDto } from './dto/changePassword.dto'
 
 @Resolver((of) => User)
 export class AuthResolver {
@@ -99,5 +100,14 @@ export class AuthResolver {
       console.log(e)
       return false
     }
+  }
+
+  @Mutation(() => User)
+  @UseGuards(GqlAuthGuard)
+  async changePassword(
+    @Args() changePasswordData: ChangePasswordDto,
+    @CurrentUser('user') user: User,
+  ) {
+    return this.authService.rewritePassword(user, changePasswordData)
   }
 }

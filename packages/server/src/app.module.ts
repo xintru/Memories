@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from './auth/auth.module'
 import { MemoryModule } from './memory/memory.module'
+import { MailModule } from './mail/mail.module'
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MemoryModule } from './memory/memory.module'
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../../.env' }),
     AuthModule,
     MemoryModule,
+    MailModule,
   ],
 })
 export class AppModule {}
