@@ -36,4 +36,6 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Graphql types and schemas
 schema.graphql
+**/graphql.types.ts

@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from './auth/auth.module'
 import { MemoryModule } from './memory/memory.module'
 import { MailModule } from './mail/mail.module'
+import { join } from 'path'
 
 @Module({
   imports: [
@@ -17,6 +18,11 @@ import { MailModule } from './mail/mail.module'
       cors: {
         origin: true,
         credentials: true,
+      },
+      typePaths: ['../../schema.graphql'],
+      definitions: {
+        path: join(process.cwd(), '../client/src/graphql/graphql.types.ts'),
+        outputAs: 'interface',
       },
     }),
     TypeOrmModule.forRoot({}),

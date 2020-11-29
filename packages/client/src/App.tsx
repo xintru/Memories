@@ -1,18 +1,14 @@
 import React from 'react'
 import { ChakraProvider, CSSReset } from '@chakra-ui/react'
 import { Router } from './routes'
-import {
-  ApolloClient,
-  ApolloProvider,
-  createHttpLink,
-  InMemoryCache,
-} from '@apollo/client'
+import { ApolloClient, ApolloProvider, createHttpLink } from '@apollo/client'
 import { Layout } from './shared/Layout'
 import { theme } from './theme/theme'
 
 import 'focus-visible/dist/focus-visible'
 import { setContext } from '@apollo/client/link/context'
 import StorageService, { StorageTypes } from './services/storage'
+import { initCache } from './graphql/cache'
 
 const httpLink = createHttpLink({
   uri: `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/graphql`,
@@ -20,7 +16,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   const storage = StorageService.Instance
-  const token = storage.get(StorageTypes.LOCAL_STORAGE, 'token')
+  const token = storage.get(StorageTypes.LOCAL_STORAGE, 'memories_token')
   return {
     headers: {
       ...headers,
@@ -31,7 +27,7 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: initCache(),
 })
 
 const App: React.FC = () => (

@@ -5,6 +5,18 @@ import { useMutation } from '@apollo/client'
 import signupMutation from '../../graphql/auth/signup.graphql'
 import { EMAIL_REG } from '../../constants/regexps'
 import StorageService, { StorageTypes } from '../../services/storage'
+import { isLoggedIn } from '../../graphql/cache'
+import { AuthReturnData } from '../../graphql/graphql.types'
+
+interface SignupMutationParams {
+  email: string
+  password: string
+  confirmPassword: string
+}
+
+interface SignupMutationResponse {
+  signup: AuthReturnData
+}
 
 interface SignupProps {
   onClose: () => void
@@ -14,17 +26,18 @@ export const Signup: FC<SignupProps> = ({ onClose }) => {
   const { register, handleSubmit, errors } = useForm()
   const toast = useToast()
 
-  const signupSuccess = (data) => {
+  const signupSuccess = (data: SignupMutationResponse) => {
     const { token, expiresAt } = data.signup.tokenData
     const storage = StorageService.Instance
-    storage.set(StorageTypes.LOCAL_STORAGE, 'token', token)
-    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
     toast({
       title: 'Signed up!',
       status: 'success',
       duration: 2000,
     })
+    isLoggedIn(true)
     onClose()
+    storage.set(StorageTypes.LOCAL_STORAGE, 'memories_token', token)
+    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
   }
 
   const signupFailed = (err) =>
@@ -34,10 +47,13 @@ export const Signup: FC<SignupProps> = ({ onClose }) => {
       duration: 2000,
     })
 
-  const [signup] = useMutation(signupMutation, {
-    onCompleted: signupSuccess,
-    onError: signupFailed,
-  })
+  const [signup] = useMutation<SignupMutationResponse, SignupMutationParams>(
+    signupMutation,
+    {
+      onCompleted: signupSuccess,
+      onError: signupFailed,
+    },
+  )
 
   // TODO: better toasts
   useEffect(() => {
@@ -51,7 +67,7 @@ export const Signup: FC<SignupProps> = ({ onClose }) => {
     }
   }, [errors])
 
-  const formSubmitHandler = async (data) =>
+  const formSubmitHandler = async (data: SignupMutationParams) =>
     await signup({ variables: { ...data } })
 
   return (

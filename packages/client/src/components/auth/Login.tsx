@@ -5,6 +5,17 @@ import { useMutation } from '@apollo/client'
 import loginMutation from '../../graphql/auth/login.graphql'
 import { EMAIL_REG } from '../../constants/regexps'
 import StorageService, { StorageTypes } from '../../services/storage'
+import { isLoggedIn } from '../../graphql/cache'
+import { AuthReturnData } from '../../graphql/graphql.types'
+
+interface LoginMutationParams {
+  email: string
+  password: string
+}
+
+interface LoginMutationResponse {
+  login: AuthReturnData
+}
 
 interface LoginProps {
   onClose: () => void
@@ -14,17 +25,19 @@ export const Login: FC<LoginProps> = ({ onClose }) => {
   const { register, handleSubmit, errors } = useForm()
   const toast = useToast()
 
-  const loginSuccess = (data) => {
+  const loginSuccess = (data: LoginMutationResponse) => {
     const { token, expiresAt } = data.login.tokenData
     const storage = StorageService.Instance
-    storage.set(StorageTypes.LOCAL_STORAGE, 'token', token)
-    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
+
     toast({
       title: 'Logged in!',
       status: 'success',
       duration: 2000,
     })
+    isLoggedIn(true)
     onClose()
+    storage.set(StorageTypes.LOCAL_STORAGE, 'memories_token', token)
+    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
   }
 
   const loginFailed = (err) => {
@@ -35,10 +48,13 @@ export const Login: FC<LoginProps> = ({ onClose }) => {
     })
   }
 
-  const [login] = useMutation(loginMutation, {
-    onCompleted: loginSuccess,
-    onError: loginFailed,
-  })
+  const [login] = useMutation<LoginMutationResponse, LoginMutationParams>(
+    loginMutation,
+    {
+      onCompleted: loginSuccess,
+      onError: loginFailed,
+    },
+  )
 
   // TODO: better toasts
   useEffect(() => {
@@ -52,8 +68,8 @@ export const Login: FC<LoginProps> = ({ onClose }) => {
     }
   }, [errors])
 
-  const formSubmitHandler = async (data) =>
-    await login({ variables: { ...data } })
+  const formSubmitHandler = async (data: LoginMutationParams) =>
+    await login({ variables: data })
 
   return (
     <Box

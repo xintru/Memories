@@ -15,17 +15,12 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Login, Signup } from 'components/auth'
-import { useQuery } from '@apollo/client'
-import MeQuery from '../../graphql/auth/me.graphql'
 
 interface MainPageProps {}
 
 export const MainPage: FC<MainPageProps> = () => {
   const { onOpen, isOpen, onClose } = useDisclosure()
   const [isLogin, setIsLogin] = useState(false)
-  const { data } = useQuery(MeQuery)
-  // TODO work with this data
-  console.log(data?.me.email)
 
   const openLoginModal = () => {
     setIsLogin(true)
