@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module'
 import { MemoryModule } from './memory/memory.module'
 import { MailModule } from './mail/mail.module'
 import { join } from 'path'
+import connectionOptions from './config/typeorm'
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { join } from 'path'
         outputAs: 'interface',
       },
     }),
-    TypeOrmModule.forRoot({}),
+    TypeOrmModule.forRoot(connectionOptions),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../../.env' }),
     AuthModule,
     MemoryModule,
