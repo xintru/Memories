@@ -39,3 +39,6 @@ lerna-debug.log*
 # Graphql types and schemas
 schema.graphql
 **/graphql.types.ts
+
+#helpers
+**/ormconfig.json

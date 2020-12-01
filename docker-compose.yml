@@ -2,8 +2,9 @@ version: '3'
 
 services:
   db:
-    container_name: graph_nest_db
-    image: postgres:9.6
+    container_name: memories_db
+    image: postgres:12.4
+    restart: always
     env_file:
       - .env
     ports:

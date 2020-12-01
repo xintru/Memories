@@ -23,9 +23,14 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config test/jest-e2e.json",
-    "typeorm": "ts-node -r tsconfig-paths/register ../../node_modules/typeorm/cli -f src/config/typeorm.ts",
-    "migration:generate": "yarn typeorm migration:generate -n",
-    "migration:run": "yarn typeorm migration:run"
+    "pretypeorm": "(rm ormconfig.json || :) && ts-node -r tsconfig-paths/register -r dotenv/config src/scripts/write-typeorm-config.ts dotenv_config_path=../../.env",
+    "typeorm": "ts-node -r tsconfig-paths/register ../../node_modules/typeorm/cli --config ormconfig.json",
+    "migration:generate": "yarn typeorm migration:generate",
+    "migration:run": "yarn typeorm migration:run",
+    "migration:revert": "yarn typeorm migration:revert",
+    "postmigration:generate": "rm ormconfig.json",
+    "postmigration:run": "rm ormconfig.json",
+    "postmigration:revert": "rm ormconfig.json"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.5.1",
