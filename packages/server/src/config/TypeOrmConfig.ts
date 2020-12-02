@@ -1,8 +1,6 @@
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm'
 import { Injectable } from '@nestjs/common'
 
-// import { JwtModuleOptions } from '@nestjs/jwt'
-
 @Injectable()
 class TypeOrmConfig implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
@@ -13,7 +11,7 @@ class TypeOrmConfig implements TypeOrmOptionsFactory {
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      synchronize: false,
+      synchronize: true,
       dropSchema: false,
       migrationsRun: false,
       entities: ['dist/**/*.model.js'],

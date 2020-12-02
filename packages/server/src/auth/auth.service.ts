@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt'
 import { ConfigService } from '@nestjs/config'
 import { MailService } from '../mail/mail.service'
 import { ChangePasswordDto } from './dto/changePassword.dto'
+import { UpdateUserDto } from './dto/updateUser.dto'
 
 @Injectable()
 export class AuthService {
@@ -21,8 +22,12 @@ export class AuthService {
     return this.jwtService.sign({ id, email })
   }
 
-  createUser(email: string, password: string) {
-    return this.userRepo.create({ email, password, memories: [] }).save()
+  createUser(email: string, password: string, name: string) {
+    return this.userRepo.create({ email, password, name, memories: [] }).save()
+  }
+
+  updateUser(user: User, updateUserDto: UpdateUserDto) {
+    return this.userRepo.update(user.id, updateUserDto)
   }
 
   async hashPassword(password: string) {

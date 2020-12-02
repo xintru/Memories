@@ -8,6 +8,7 @@ import { LoginDto } from './dto/login.dto'
 import { SignUpDto } from './dto/signup.dto'
 import { GqlAuthGuard } from './auth.guard'
 import { ChangePasswordDto } from './dto/changePassword.dto'
+import { UpdateUserDto } from './dto/updateUser.dto'
 
 @Resolver((of) => User)
 export class AuthResolver {
@@ -71,7 +72,8 @@ export class AuthResolver {
         HttpStatus.BAD_REQUEST,
       )
     }
-    const user = await this.authService.createUser(email, dbPassword)
+    const name = email.split('@')[0]
+    const user = await this.authService.createUser(email, dbPassword, name)
     const userWithoutPassword = { ...user }
     delete userWithoutPassword.password
     const token = this.authService.createToken(user)
@@ -100,6 +102,22 @@ export class AuthResolver {
       console.log(e)
       return false
     }
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GqlAuthGuard)
+  async updateUser(
+    @Args() updateUserDto: UpdateUserDto,
+    @CurrentUser('user') user: User,
+  ) {
+    const userFromDb = await this.authService.getUserByEmail(
+      updateUserDto.email,
+    )
+    if (userFromDb && userFromDb.email !== user.email) {
+      throw new HttpException('This email is taken.', HttpStatus.BAD_REQUEST)
+    }
+    const res = await this.authService.updateUser(user, updateUserDto)
+    return res.affected > 0
   }
 
   @Mutation(() => User)
