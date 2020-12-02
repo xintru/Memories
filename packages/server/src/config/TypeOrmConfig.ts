@@ -1,8 +1,10 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm'
 import { Injectable } from '@nestjs/common'
 
+// import { JwtModuleOptions } from '@nestjs/jwt'
+
 @Injectable()
-class ConfigService {
+class TypeOrmConfig implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return {
       type: 'postgres',
@@ -23,6 +25,4 @@ class ConfigService {
   }
 }
 
-export const configInstance = new ConfigService()
-
-export default ConfigService
+export default TypeOrmConfig

@@ -6,7 +6,7 @@ import { AuthModule } from './auth/auth.module'
 import { MemoryModule } from './memory/memory.module'
 import { MailModule } from './mail/mail.module'
 import { join } from 'path'
-import GlobalConfigService from './config/ConfigService'
+import TypeOrmConfig from './config/TypeOrmConfig'
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import GlobalConfigService from './config/ConfigService'
       },
     }),
     TypeOrmModule.forRootAsync({
-      useExisting: GlobalConfigService,
+      useClass: TypeOrmConfig,
     }),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../../.env' }),
     AuthModule,
