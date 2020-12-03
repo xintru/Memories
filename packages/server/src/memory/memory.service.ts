@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 import { Memory } from './memory.model'
 import { User } from '../auth/auth.model'
 import { MemoryDto } from './dto/memory.dto'
+import { MemoriesPaginatedDto } from './dto/memories-paginated.dto'
 
 @Injectable()
 export class MemoryService {
@@ -12,13 +13,17 @@ export class MemoryService {
     private readonly memoryRepository: Repository<Memory>,
   ) {}
 
-  getUserMemories(userId: string) {
-    return this.memoryRepository.find({
-      where: (qb) => {
-        qb.where('Memory__user.id = :id', { id: userId })
-      },
-      relations: ['user'],
-    })
+  getAllMemories({ limit = 0, page = 1 }: MemoriesPaginatedDto) {
+    const skippedItems = (page - 1) * limit
+
+    return this.memoryRepository
+      .createQueryBuilder('memory')
+      .leftJoinAndSelect('memory.comments', 'comment')
+      .leftJoinAndSelect('memory.user', 'user')
+      .orderBy('memory.created', 'DESC')
+      .offset(skippedItems)
+      .limit(limit)
+      .getMany()
   }
 
   getMemoryById(memoryId: string) {
@@ -30,6 +35,7 @@ export class MemoryService {
       .create({
         ...newMemoryData,
         user: [user],
+        comments: [],
       })
       .save()
   }

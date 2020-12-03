@@ -4,10 +4,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 import { Field, ObjectType } from '@nestjs/graphql'
 import { Memory } from '../memory/memory.model'
+import { Comment } from '../comment/comment.model'
 
 @ObjectType()
 @Entity('User')
@@ -27,7 +29,7 @@ export class User extends BaseEntity {
   @Column()
   password: string
 
-  @ManyToMany((type) => Memory, (memory: Memory) => memory.user, {
+  @ManyToMany(() => Memory, (memory: Memory) => memory.user, {
     cascade: true,
   })
   @JoinTable({
@@ -35,8 +37,12 @@ export class User extends BaseEntity {
     joinColumn: { name: 'user_id', referencedColumnName: 'id' },
     inverseJoinColumn: { name: 'memory_id', referencedColumnName: 'id' },
   })
-  @Field((type) => [Memory])
+  @Field(() => [Memory])
   memories: Memory[]
+
+  @Field(() => [Comment])
+  @OneToMany(() => Comment, (comment: Comment) => comment.user)
+  comments: Comment[]
 }
 
 @ObjectType()

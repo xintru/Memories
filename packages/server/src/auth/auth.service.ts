@@ -23,7 +23,9 @@ export class AuthService {
   }
 
   createUser(email: string, password: string, name: string) {
-    return this.userRepo.create({ email, password, name, memories: [] }).save()
+    return this.userRepo
+      .create({ email, password, name, memories: [], comments: [] })
+      .save()
   }
 
   updateUser(user: User, updateUserDto: UpdateUserDto) {
@@ -54,7 +56,10 @@ export class AuthService {
   }
 
   getUserByEmail(email: string) {
-    return this.userRepo.findOne({ email }, { relations: ['memories'] })
+    return this.userRepo.findOne(
+      { email },
+      { relations: ['memories', 'comments'] },
+    )
   }
 
   async sendNewPassword(email: string) {

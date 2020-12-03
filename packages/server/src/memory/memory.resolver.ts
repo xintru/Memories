@@ -6,6 +6,7 @@ import { UseGuards } from '@nestjs/common'
 import { CurrentUser } from '../shared/decorators/CurrentUser.decorator'
 import { User } from '../auth/auth.model'
 import { MemoryDto } from './dto/memory.dto'
+import { MemoriesPaginatedDto } from './dto/memories-paginated.dto'
 
 @Resolver(() => Memory)
 export class MemoryResolver {
@@ -13,8 +14,8 @@ export class MemoryResolver {
 
   @Query(() => [Memory])
   @UseGuards(GqlAuthGuard)
-  async userMemories(@CurrentUser('user') user: User) {
-    return await this.memoryService.getUserMemories(user.id)
+  async allMemories(@Args() memoriesPaginatedDto: MemoriesPaginatedDto) {
+    return await this.memoryService.getAllMemories(memoriesPaginatedDto)
   }
 
   @Query(() => Memory)

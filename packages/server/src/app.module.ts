@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module'
 import { MemoryModule } from './memory/memory.module'
 import { MailModule } from './mail/mail.module'
 import { join } from 'path'
+import { CommentModule } from './comment/comment.module'
 import TypeOrmConfig from './config/TypeOrmConfig'
 
 @Module({
@@ -33,6 +34,7 @@ import TypeOrmConfig from './config/TypeOrmConfig'
     AuthModule,
     MemoryModule,
     MailModule,
+    CommentModule,
   ],
 })
 export class AppModule {}
