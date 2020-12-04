@@ -29,6 +29,8 @@ export const Login: FC<LoginProps> = ({ onClose }) => {
     const { token, expiresAt } = data.login.tokenData
     const storage = StorageService.Instance
 
+    storage.set(StorageTypes.LOCAL_STORAGE, 'memories_token', token)
+    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
     toast({
       title: 'Logged in!',
       status: 'success',
@@ -36,23 +38,12 @@ export const Login: FC<LoginProps> = ({ onClose }) => {
     })
     isLoggedIn(true)
     onClose()
-    storage.set(StorageTypes.LOCAL_STORAGE, 'memories_token', token)
-    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
-  }
-
-  const loginFailed = (err) => {
-    toast({
-      title: err.message,
-      status: 'error',
-      duration: 2000,
-    })
   }
 
   const [login] = useMutation<LoginMutationResponse, LoginMutationParams>(
     loginMutation,
     {
       onCompleted: loginSuccess,
-      onError: loginFailed,
     },
   )
 

@@ -7,6 +7,4 @@ export const isLoggedIn = makeVar(
   !!storage.get(StorageTypes.LOCAL_STORAGE, 'memories_token'),
 )
 
-export const initCache = () => {
-  return new InMemoryCache()
-}
+export const cache = new InMemoryCache()

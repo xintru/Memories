@@ -29,6 +29,9 @@ export const Signup: FC<SignupProps> = ({ onClose }) => {
   const signupSuccess = (data: SignupMutationResponse) => {
     const { token, expiresAt } = data.signup.tokenData
     const storage = StorageService.Instance
+
+    storage.set(StorageTypes.LOCAL_STORAGE, 'memories_token', token)
+    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
     toast({
       title: 'Signed up!',
       status: 'success',
@@ -36,22 +39,12 @@ export const Signup: FC<SignupProps> = ({ onClose }) => {
     })
     isLoggedIn(true)
     onClose()
-    storage.set(StorageTypes.LOCAL_STORAGE, 'memories_token', token)
-    storage.set(StorageTypes.LOCAL_STORAGE, 'expiresAt', expiresAt)
   }
-
-  const signupFailed = (err) =>
-    toast({
-      title: err.message,
-      status: 'error',
-      duration: 2000,
-    })
 
   const [signup] = useMutation<SignupMutationResponse, SignupMutationParams>(
     signupMutation,
     {
       onCompleted: signupSuccess,
-      onError: signupFailed,
     },
   )
 

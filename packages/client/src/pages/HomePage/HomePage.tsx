@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Center, Text, VStack } from '@chakra-ui/react'
-import { useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client'
 import MeQuery from '../../graphql/auth/me.graphql'
 import { User } from '../../graphql/graphql.types'
 import { isLoggedIn } from '../../graphql/cache'
@@ -11,11 +11,13 @@ interface MeQueryResponse {
 }
 
 export const HomePage = () => {
+  const apolloClient = useApolloClient()
   const { data, loading } = useQuery<MeQueryResponse>(MeQuery)
 
   const logout = () => {
     isLoggedIn(false)
     StorageService.Instance.remove(StorageTypes.LOCAL_STORAGE, 'memories_token')
+    apolloClient.resetStore()
   }
 
   if (loading) return <div>loading...</div>

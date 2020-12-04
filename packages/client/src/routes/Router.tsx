@@ -4,9 +4,10 @@ import { useReactiveVar } from '@apollo/client'
 import { isLoggedIn } from '../graphql/cache'
 import { AuthenticatedRouter } from './AuthenticatedRouter'
 import { NonAuthenticatedRouter } from './NonAuthenticatedRouter'
+import { ROUTES } from './routes'
 
 export interface Routes {
-  path: string
+  path: ROUTES
   component: any
   exact: boolean
 }
