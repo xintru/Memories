@@ -18,7 +18,6 @@ export class MemoryService {
 
     return this.memoryRepository
       .createQueryBuilder('memory')
-      .leftJoinAndSelect('memory.comments', 'comment')
       .leftJoinAndSelect('memory.user', 'user')
       .orderBy('memory.created', 'DESC')
       .offset(skippedItems)
@@ -27,7 +26,9 @@ export class MemoryService {
   }
 
   getMemoryById(memoryId: string) {
-    return this.memoryRepository.findOne(memoryId, { relations: ['user'] })
+    return this.memoryRepository.findOne(memoryId, {
+      relations: ['user', 'comments', 'comments.user'],
+    })
   }
 
   createMemory(newMemoryData: MemoryDto, user: User) {

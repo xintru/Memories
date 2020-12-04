@@ -27,11 +27,13 @@ export class Memory extends BaseEntity {
   description: string
 
   @Field(() => [User])
-  @ManyToMany(() => User, (user: User) => user.memories)
+  @ManyToMany(() => User, (user: User) => user.memories, { eager: false })
   user: User[]
 
   @Field(() => [Comment])
-  @OneToMany(() => Comment, (comment: Comment) => comment.memory)
+  @OneToMany(() => Comment, (comment: Comment) => comment.memory, {
+    eager: false,
+  })
   comments: Comment[]
 
   @Field()

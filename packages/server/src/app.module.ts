@@ -26,6 +26,7 @@ import TypeOrmConfig from './config/TypeOrmConfig'
         path: join(process.cwd(), '../client/src/graphql/graphql.types.ts'),
         outputAs: 'interface',
       },
+      installSubscriptionHandlers: true,
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfig,
