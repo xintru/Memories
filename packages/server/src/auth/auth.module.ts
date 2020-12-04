@@ -7,6 +7,8 @@ import { JwtStrategy } from './auth.strategy'
 import { PassportModule } from '@nestjs/passport'
 import { MailModule } from '../mail/mail.module'
 import { JwtModule } from '@nestjs/jwt'
+import { MemoriesConfigModule } from '../config/config.module'
+import { MemoriesConfigService } from '../config/config.service'
 
 @Module({
   imports: [
@@ -14,10 +16,8 @@ import { JwtModule } from '@nestjs/jwt'
     PassportModule,
     MailModule,
     JwtModule.registerAsync({
-      useFactory: async () => ({
-        secret: process.env.JWT_SECRET,
-        signOptions: { expiresIn: +process.env.JWT_EXPIRES_AT },
-      }),
+      imports: [MemoriesConfigModule],
+      useExisting: MemoriesConfigService,
     }),
   ],
   providers: [AuthService, AuthResolver, JwtStrategy],

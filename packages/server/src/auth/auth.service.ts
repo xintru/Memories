@@ -55,8 +55,8 @@ export class AuthService {
     }
   }
 
-  async getUserByEmail(email: string) {
-    const res = await this.userRepo.findOne(
+  getUserByEmail(email: string) {
+    return this.userRepo.findOne(
       { email },
       {
         relations: [
@@ -67,8 +67,6 @@ export class AuthService {
         ],
       },
     )
-    console.log(res)
-    return res
   }
 
   async sendNewPassword(email: string) {
