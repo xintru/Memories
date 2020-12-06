@@ -28,7 +28,7 @@ export const HomePage = () => {
       <VStack spacing={4}>
         <Text>{data?.me.email}</Text>
         <UploadWidget />
-        <Text>URL IS: {imgUrl}</Text>
+        <Text>URL IS: {imgUrl.join(', ')}</Text>
         <Button onClick={logout}>Logout</Button>
       </VStack>
     </Center>

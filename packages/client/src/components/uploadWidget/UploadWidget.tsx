@@ -1,52 +1,54 @@
-import React, { useCallback, useMemo } from 'react'
-import { Button } from '@chakra-ui/react'
+import React, { useRef } from 'react'
+import { Button, useToast } from '@chakra-ui/react'
 import { lastUploadedImageUrl } from '../../graphql/cache'
-import {
-  UploadResult,
-  WidgetSettings,
-  WidgetSources,
-} from 'components/uploadWidget/types'
-import { widgetStyles } from 'components/uploadWidget/styles'
+import { cloudinaryUploadService } from 'components/uploadWidget/uploadService'
 
-declare global {
-  interface Window {
-    cloudinary: {
-      createUploadWidget(
-        settings: WidgetSettings,
-        res: (err: any, result: UploadResult) => void,
-      ): { open: () => void }
-    }
-  }
+interface UploadWidgetProps {
+  multiple?: boolean
 }
 
-export const UploadWidget = () => {
-  const checkUploadResult = useCallback((resultEvent: UploadResult) => {
-    if (resultEvent.event === 'success') {
-      lastUploadedImageUrl(resultEvent.info.secure_url)
+const TWO_MEGABYTES = 2097152
+
+export const UploadWidget: React.FC<UploadWidgetProps> = ({ multiple }) => {
+  const inputRef = useRef<HTMLInputElement>()
+  const toast = useToast()
+
+  const openInputModal = () => {
+    inputRef.current.click()
+  }
+
+  const onFileUpload = async (evt) => {
+    lastUploadedImageUrl([])
+    const files = [...evt.target.files]
+    const exceeding = files
+      .map((file) => file.size > TWO_MEGABYTES)
+      .reduce((acc, val) => acc && val, true)
+    if (!exceeding) {
+      const res: { secure_url: string }[] = await Promise.all(
+        files.map((file) => cloudinaryUploadService(file)),
+      )
+      lastUploadedImageUrl(res.map((file) => file.secure_url))
+    } else {
+      toast({
+        title:
+          'Your file(s) exceeding 2MB limit. Please, choose a different file.',
+        status: 'error',
+        duration: 5000,
+      })
     }
-  }, [])
-
-  const widget = useMemo(
-    () =>
-      window.cloudinary.createUploadWidget(
-        {
-          cloudName: process.env.CLOUDINARY_NAME,
-          uploadPreset: process.env.CLOUDINARY_PRESET,
-          sources: [WidgetSources.LOCAL, WidgetSources.URL],
-          ...widgetStyles,
-        },
-        (err, result) => checkUploadResult(result),
-      ),
-    [],
-  )
-
-  const showWidget = useCallback(() => {
-    widget.open()
-  }, [widget])
+  }
 
   return (
     <div>
-      <Button onClick={showWidget}>Upload</Button>
+      <input
+        type="file"
+        style={{ display: 'none' }}
+        ref={inputRef}
+        onChange={onFileUpload}
+        multiple={multiple}
+        accept=".jpg,.png,.jpeg,.webp"
+      />
+      <Button onClick={openInputModal}>Upload</Button>
     </div>
   )
 }
