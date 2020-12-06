@@ -20,6 +20,13 @@ export const UploadWidget: React.FC<UploadWidgetProps> = ({ multiple }) => {
   const onFileUpload = async (evt) => {
     lastUploadedImageUrl([])
     const files = [...evt.target.files]
+    if (files.length > 9) {
+      return toast({
+        title: 'Max amount of files is 9.',
+        status: 'error',
+        duration: 5000,
+      })
+    }
     const exceeding = files
       .map((file) => file.size > TWO_MEGABYTES)
       .reduce((acc, val) => acc && val, true)
