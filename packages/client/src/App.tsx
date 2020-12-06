@@ -4,19 +4,18 @@ import { Router } from './routes'
 import { Layout } from './shared/Layout'
 import { theme } from './theme/theme'
 import { ApolloConfig } from './graphql/ApolloConfig'
-import { CloudinaryContext } from 'cloudinary-react'
-
+import { IconContext } from 'react-icons'
 import 'focus-visible/dist/focus-visible'
 
 const App: React.FC = () => (
   <ChakraProvider theme={theme}>
     <ApolloConfig>
-      <CloudinaryContext cloudName={process.env.CLOUDINARY_NAME}>
+      <IconContext.Provider value={{ color: theme.colors.main.darkblue }}>
         <CSSReset />
         <Layout>
           <Router />
         </Layout>
-      </CloudinaryContext>
+      </IconContext.Provider>
     </ApolloConfig>
   </ChakraProvider>
 )

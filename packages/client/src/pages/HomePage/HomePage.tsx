@@ -5,7 +5,7 @@ import MeQuery from '../../graphql/auth/me.graphql'
 import { User } from '../../graphql/graphql.types'
 import { isLoggedIn, lastUploadedImageUrl } from '../../graphql/cache'
 import StorageService, { StorageTypes } from '../../services/storage'
-import { UploadWidget } from 'components/uploadWidget'
+import { ImageUploader } from 'components/ImageUploader'
 
 interface MeQueryResponse {
   me: User
@@ -27,7 +27,7 @@ export const HomePage = () => {
     <Center minH="100vh">
       <VStack spacing={4}>
         <Text>{data?.me.email}</Text>
-        <UploadWidget />
+        <ImageUploader w="300px" h="200px" />
         <Text>URL IS: {imgUrl.join(', ')}</Text>
         <Button onClick={logout}>Logout</Button>
       </VStack>
