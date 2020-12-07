@@ -1,7 +1,7 @@
 import React from 'react'
 import { ChakraProvider, CSSReset } from '@chakra-ui/react'
 import { Router } from './routes'
-import { Layout } from './shared/Layout'
+import { Layout } from './components/Layout'
 import { theme } from './theme/theme'
 import { ApolloConfig } from './graphql/ApolloConfig'
 import { IconContext } from 'react-icons'

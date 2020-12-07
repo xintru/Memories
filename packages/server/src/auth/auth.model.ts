@@ -31,8 +31,7 @@ export class User extends BaseEntity {
 
   @Field()
   @Column({
-    default:
-      'https://res.cloudinary.com/memories-xintru-cloud/image/upload/v1607338100/ete9p0qxoskrmiqah4o0.png',
+    default: '',
   })
   avatar_url: string
 

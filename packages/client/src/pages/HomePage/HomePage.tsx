@@ -1,35 +1,38 @@
 import React from 'react'
-import { Button, Center, Text, VStack } from '@chakra-ui/react'
-import { useApolloClient, useQuery, useReactiveVar } from '@apollo/client'
-import MeQuery from '../../graphql/auth/me.graphql'
+import { Center, Text, VStack } from '@chakra-ui/react'
+import { useQuery } from '@apollo/client'
+import MyMemoriesQuery from '../../graphql/user/myMemoriesQuery.graphql'
 import { User } from '../../graphql/graphql.types'
-import { isLoggedIn, lastUploadedImageUrl } from '../../graphql/cache'
-import StorageService, { StorageTypes } from '../../services/storage'
-import { ImageUploader } from 'components/ImageUploader'
 
 interface MeQueryResponse {
-  me: User
+  me: {
+    memories: User['memories']
+  }
 }
 
 export const HomePage = () => {
-  const apolloClient = useApolloClient()
-  const { data, loading } = useQuery<MeQueryResponse>(MeQuery)
-  const imgUrl = useReactiveVar(lastUploadedImageUrl)
+  const { data, loading } = useQuery<MeQueryResponse>(MyMemoriesQuery)
 
-  const logout = () => {
-    isLoggedIn(false)
-    StorageService.Instance.remove(StorageTypes.LOCAL_STORAGE, 'memories_token')
-    apolloClient.resetStore()
-  }
-
-  if (loading) return <div>loading...</div>
+  if (loading)
+    return (
+      <Center w="100%">
+        <div>loading...</div>
+      </Center>
+    )
   return (
-    <Center minH="100vh">
-      <VStack spacing={4}>
-        <Text>{data?.me.email}</Text>
-        <ImageUploader w="300px" h="200px" />
-        <Text>URL IS: {imgUrl.join(', ')}</Text>
-        <Button onClick={logout}>Logout</Button>
+    <Center w="100%">
+      <VStack spacing={4} mt="1rem" mb="1rem">
+        {data.me.memories.map((memory) => (
+          <Center
+            h="300px"
+            w="600px"
+            border="2px solid"
+            borderColor="main.darkblue"
+            borderRadius="0.5rem"
+          >
+            <Text>{memory.name}</Text>
+          </Center>
+        ))}
       </VStack>
     </Center>
   )

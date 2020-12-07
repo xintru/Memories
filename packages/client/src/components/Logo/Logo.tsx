@@ -8,7 +8,12 @@ interface LogoProps {
 
 export const Logo: FC<LogoProps> = ({ color = 'white', size = '2xl' }) => {
   return (
-    <Heading color={color} fontSize={size} fontFamily="Dancing Script">
+    <Heading
+      color={color}
+      fontSize={size}
+      fontFamily="Dancing Script"
+      marginBottom="1rem"
+    >
       Memories
     </Heading>
   )
