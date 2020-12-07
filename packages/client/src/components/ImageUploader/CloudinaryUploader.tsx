@@ -1,7 +1,8 @@
-import React, { ChangeEvent, ForwardedRef } from 'react'
+import React, { ChangeEvent, ForwardedRef, useContext } from 'react'
 import { useToast } from '@chakra-ui/react'
-import { imageUploadPending, lastUploadedImageUrl } from '../../graphql/cache'
+import { lastUploadedImageUrl } from '../../graphql/cache'
 import { cloudinaryUploadService } from 'components/ImageUploader/upload-api.service'
+import { UploadContext } from 'components/ImageUploader/ImageUploader'
 
 interface CloudinaryUploaderProps {
   multiple: boolean
@@ -14,14 +15,15 @@ export const CloudinaryUploader = React.forwardRef(
     { multiple }: CloudinaryUploaderProps,
     ref: ForwardedRef<HTMLInputElement>,
   ) => {
+    const { setIsPending } = useContext(UploadContext)
     const toast = useToast()
 
     const onFileUpload = async (evt: ChangeEvent<HTMLInputElement>) => {
-      imageUploadPending(true)
+      setIsPending(true)
       lastUploadedImageUrl([])
       const files = [...evt.target.files]
       if (files.length > 9) {
-        imageUploadPending(false)
+        setIsPending(false)
         return toast({
           title: 'Max amount of files is 9.',
           status: 'error',
@@ -36,9 +38,9 @@ export const CloudinaryUploader = React.forwardRef(
           files.map((file) => cloudinaryUploadService(file)),
         )
         lastUploadedImageUrl(res.map((file) => file.secure_url))
-        imageUploadPending(false)
+        setIsPending(false)
       } else {
-        imageUploadPending(false)
+        setIsPending(false)
         return toast({
           title:
             'Your file(s) exceeding 2MB limit. Please, choose a different file.',

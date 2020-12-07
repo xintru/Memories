@@ -7,6 +7,5 @@ export const isLoggedIn = makeVar<boolean>(
   !!storage.get(StorageTypes.LOCAL_STORAGE, 'memories_token'),
 )
 export const lastUploadedImageUrl = makeVar<string[]>([])
-export const imageUploadPending = makeVar<boolean>(false)
 
 export const cache = new InMemoryCache()
