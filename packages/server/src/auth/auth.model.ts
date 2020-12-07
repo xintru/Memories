@@ -29,6 +29,13 @@ export class User extends BaseEntity {
   @Column()
   password: string
 
+  @Field()
+  @Column({
+    default:
+      'https://res.cloudinary.com/memories-xintru-cloud/image/upload/v1607338100/ete9p0qxoskrmiqah4o0.png',
+  })
+  avatar_url: string
+
   @ManyToMany(() => Memory, (memory: Memory) => memory.user, {
     cascade: true,
   })

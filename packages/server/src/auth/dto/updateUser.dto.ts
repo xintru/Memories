@@ -1,5 +1,5 @@
 import { ArgsType, Field } from '@nestjs/graphql'
-import { IsEmail, MaxLength, MinLength } from 'class-validator'
+import { IsEmail, IsUrl, MaxLength, MinLength } from 'class-validator'
 
 @ArgsType()
 export class UpdateUserDto {
@@ -11,4 +11,8 @@ export class UpdateUserDto {
   @MinLength(2)
   @MaxLength(16)
   name: string
+
+  @Field()
+  @IsUrl()
+  avatar_url: string
 }
