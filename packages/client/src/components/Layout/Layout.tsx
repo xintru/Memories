@@ -12,7 +12,7 @@ export const Layout: FC<LayoutProps> = ({ children }) => {
     <Box bg="main.pink" minW="100vw" minH="100vh">
       <Flex align="flex-start">
         {isUserLoggedIn && <Menu />}
-        {children}
+        <Box w="100%">{children}</Box>
       </Flex>
     </Box>
   )

@@ -1,11 +1,26 @@
 import React from 'react'
 import { Container, List, ListIcon, ListItem } from '@chakra-ui/react'
-import { IoIosArrowDroprightCircle } from 'react-icons/all'
+import { IoIosArrowDroprightCircle } from 'react-icons/io'
+import { RiLogoutCircleRFill } from 'react-icons/ri'
+import { BsGearFill } from 'react-icons/bs'
 import { Logo } from 'components/Logo'
 import { UserInfo } from 'components/Menu/UserInfo'
-import { Logout } from 'components/auth'
+import { useApolloClient } from '@apollo/client'
+import { isLoggedIn } from '../../graphql/cache'
+import StorageService, { StorageTypes } from '../../services/storage'
+import { menuItemStyles } from 'components/Menu/style'
+import { NavLink } from 'react-router-dom'
+import { ROUTES } from '../../routes/routes'
 
 export const Menu = () => {
+  const apolloClient = useApolloClient()
+
+  const logout = () => {
+    isLoggedIn(false)
+    StorageService.Instance.remove(StorageTypes.LOCAL_STORAGE, 'memories_token')
+    apolloClient.resetStore()
+  }
+
   return (
     <Container
       w="250px"
@@ -20,19 +35,22 @@ export const Menu = () => {
       position="sticky"
       top="0"
     >
-      <Logo size="40px" color="main.darkblue" />
+      <Logo size="50px" color="main.darkblue" />
       <UserInfo />
       <List spacing={3} width="100%" mb="1rem">
-        <ListItem>
+        <ListItem as={NavLink} to={ROUTES.HOME_PAGE} {...menuItemStyles}>
           <ListIcon as={IoIosArrowDroprightCircle} color="main.darkblue" />
           Main page
         </ListItem>
-        <ListItem>
-          <ListIcon as={IoIosArrowDroprightCircle} color="main.darkblue" />
-          Other page
+        <ListItem as={NavLink} to={ROUTES.EDIT_PROFILE} {...menuItemStyles}>
+          <ListIcon as={BsGearFill} color="main.darkblue" />
+          Edit profile
+        </ListItem>
+        <ListItem onClick={logout} {...menuItemStyles}>
+          <ListIcon as={RiLogoutCircleRFill} color="main.darkblue" />
+          Logout
         </ListItem>
       </List>
-      <Logout />
     </Container>
   )
 }

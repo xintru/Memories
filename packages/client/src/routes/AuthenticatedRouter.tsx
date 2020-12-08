@@ -1,10 +1,16 @@
 import React from 'react'
 import { Routes } from './Router'
 import { HomePage } from '../pages/HomePage'
-import { Redirect, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { ROUTES } from './routes'
+import { EditProfile } from '../pages/EditProfile'
 
 const routes: Routes[] = [
+  {
+    path: ROUTES.EDIT_PROFILE,
+    component: EditProfile,
+    exact: false,
+  },
   {
     path: ROUTES.HOME_PAGE,
     component: HomePage,
@@ -23,7 +29,7 @@ export const AuthenticatedRouter: React.FC = () => {
           key={`non_auth_router_${i + 1}`}
         />
       ))}
-      <Redirect to={ROUTES.HOME_PAGE} />
+      {/*<Redirect to={ROUTES.HOME_PAGE} />*/}
     </>
   )
 }

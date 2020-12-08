@@ -28,10 +28,10 @@ export const UserInfo = () => {
       <HStack>
         <Avatar src={data.me.avatar_url} name={data.me.name} size="lg" />
         <Box>
-          <Text fontSize="1.25rem" fontFamily="Lato">
+          <Text fontSize="1.5rem" fontFamily="Lato">
             {data.me.name}
           </Text>
-          <Text fontSize="0.75rem" fontFamily="Lato">
+          <Text fontSize="1rem" fontFamily="Lato">
             {data.me.email}
           </Text>
         </Box>
