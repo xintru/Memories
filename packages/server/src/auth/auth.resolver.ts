@@ -116,7 +116,7 @@ export class AuthResolver {
     if (userFromDb && userFromDb.email !== user.email) {
       throw new HttpException('This email is taken.', HttpStatus.BAD_REQUEST)
     }
-    const res = await this.authService.updateUser(user, updateUserDto)
+    const res = await this.authService.updateUser(userFromDb, updateUserDto)
     return res.affected > 0
   }
 

@@ -9,6 +9,8 @@ import { MailService } from '../mail/mail.service'
 import { ChangePasswordDto } from './dto/changePassword.dto'
 import { UpdateUserDto } from './dto/updateUser.dto'
 
+const cloudinary = require('cloudinary')
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,6 +31,17 @@ export class AuthService {
   }
 
   updateUser(user: User, updateUserDto: UpdateUserDto) {
+    if (user.avatar_url) {
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+      })
+      cloudinary.v2.uploader.destroy(
+        user.avatar_url.split('/').reverse()[0].split('.')[0],
+      )
+    }
+
     return this.userRepo.update(user.id, updateUserDto)
   }
 

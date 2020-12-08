@@ -47,6 +47,7 @@
     "bcrypt": "^5.0.0",
     "bull": "^3.20.0",
     "class-validator": "^0.12.2",
+    "cloudinary": "^1.23.0",
     "dotenv": "^8.2.0",
     "generate-password": "^1.5.1",
     "graphql": "^15.4.0",
