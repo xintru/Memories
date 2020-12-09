@@ -6,11 +6,12 @@ import { BsGearFill } from 'react-icons/bs'
 import { Logo } from 'components/Logo'
 import { UserInfo } from 'components/Menu/UserInfo'
 import { useApolloClient } from '@apollo/client'
-import { isLoggedIn } from '../../graphql/cache'
+import { isLoggedIn } from 'graphql/cache'
 import StorageService, { StorageTypes } from '../../services/storage'
 import { menuItemStyles } from 'components/Menu/style'
 import { NavLink } from 'react-router-dom'
 import { ROUTES } from '../../routes/routes'
+import { MdAddAPhoto } from 'react-icons/md'
 
 export const Menu = () => {
   const apolloClient = useApolloClient()
@@ -41,6 +42,10 @@ export const Menu = () => {
         <ListItem as={NavLink} to={ROUTES.HOME_PAGE} {...menuItemStyles}>
           <ListIcon as={IoIosArrowDroprightCircle} color="main.darkblue" />
           Main page
+        </ListItem>
+        <ListItem as={NavLink} to={ROUTES.CAPTURE_MEMORY} {...menuItemStyles}>
+          <ListIcon as={MdAddAPhoto} color="main.darkblue" />
+          Capture new memory
         </ListItem>
         <ListItem as={NavLink} to={ROUTES.EDIT_PROFILE} {...menuItemStyles}>
           <ListIcon as={BsGearFill} color="main.darkblue" />

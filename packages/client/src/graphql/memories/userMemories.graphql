@@ -1,9 +1,0 @@
-query {
-    userMemories {
-        name
-        description
-        user {
-            email
-        }
-    }
-}

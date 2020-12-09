@@ -1,0 +1,10 @@
+query AllMemories($limit: Int!, $page: Int!) {
+    allMemories(limit: $limit page: $page) {
+        description
+        name
+        created
+        user {
+            name
+        }
+    }
+}

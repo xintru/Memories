@@ -4,8 +4,14 @@ import { HomePage } from '../pages/HomePage'
 import { Route } from 'react-router-dom'
 import { ROUTES } from './routes'
 import { EditProfile } from '../pages/EditProfile'
+import { CaptureMemory } from '../pages/CaptureMemory'
 
 const routes: Routes[] = [
+  {
+    path: ROUTES.CAPTURE_MEMORY,
+    component: CaptureMemory,
+    exact: false,
+  },
   {
     path: ROUTES.EDIT_PROFILE,
     component: EditProfile,

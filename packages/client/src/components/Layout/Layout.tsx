@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Box, Flex } from '@chakra-ui/react'
 import { Menu } from 'components/Menu'
 import { useReactiveVar } from '@apollo/client'
-import { isLoggedIn } from '../../graphql/cache'
+import { isLoggedIn } from 'graphql/cache'
 
 interface LayoutProps {}
 

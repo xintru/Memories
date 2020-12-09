@@ -17,6 +17,9 @@ import EditProfileQuery from 'graphql/user/editProfileQuery.graphql'
 import EditProfileMutation from 'graphql/user/editProfileMutation.graphql'
 import { useMutation, useQuery } from '@apollo/client'
 import { lastUploadedImageUrl } from 'graphql/cache'
+import UserInfoQuery from '../../../graphql/user/userInfoQuery.graphql'
+import { useHistory } from 'react-router-dom'
+import { ROUTES } from '../../routes/routes'
 
 interface IEditForm {
   name: string
@@ -31,23 +34,25 @@ interface EditProfileParams {
 
 export const EditProfile: React.FC = () => {
   const { register, handleSubmit } = useForm()
-  const { data, refetch } = useQuery(EditProfileQuery)
+  const { data } = useQuery(EditProfileQuery)
   const toast = useToast()
+  const history = useHistory()
 
   const editProfileSuccess = () => {
-    refetch()
     toast({
       title: 'Successfully changed you profile info!',
       status: 'success',
       duration: 2000,
     })
     lastUploadedImageUrl([])
+    history.push(ROUTES.HOME_PAGE)
   }
 
   const [editProfile] = useMutation<boolean, EditProfileParams>(
     EditProfileMutation,
     {
       onCompleted: editProfileSuccess,
+      refetchQueries: [{ query: UserInfoQuery }],
     },
   )
 

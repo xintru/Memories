@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import { useQuery } from '@apollo/client'
 import UserInfoQuery from '../../../graphql/user/userInfoQuery.graphql'
-import { User } from '../../../graphql/graphql.types'
+import { User } from 'graphql/graphql.types'
 
 interface UserInfoQueryResponse {
   me: {

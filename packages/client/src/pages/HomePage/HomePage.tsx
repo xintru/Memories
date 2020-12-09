@@ -1,17 +1,35 @@
 import React from 'react'
-import { Center, Text, VStack } from '@chakra-ui/react'
+import { Center, Grid } from '@chakra-ui/react'
 import { useQuery } from '@apollo/client'
-import MyMemoriesQuery from '../../graphql/user/myMemoriesQuery.graphql'
-import { User } from '../../graphql/graphql.types'
+import AllMemoriesQuery from 'graphql/memories/allMemoriesQuery.graphql'
+import { Memory, User } from 'graphql/graphql.types'
+import { MemoryCard } from 'components/MemoryCard'
 
-interface MeQueryResponse {
-  me: {
-    memories: User['memories']
-  }
+export interface HomePageMemory {
+  name: Memory['name']
+  description: Memory['description']
+  user: {
+    name: User['name']
+  }[]
+  created: Memory['created']
+}
+
+interface AllMemoriesResponse {
+  allMemories: HomePageMemory[]
+}
+
+interface AllMemoriesParams {
+  limit: number
+  page: number
 }
 
 export const HomePage = () => {
-  const { data, loading } = useQuery<MeQueryResponse>(MyMemoriesQuery)
+  const { data, loading, refetch } = useQuery<
+    AllMemoriesResponse,
+    AllMemoriesParams
+  >(AllMemoriesQuery, {
+    variables: { limit: 0, page: 1 },
+  })
 
   if (loading)
     return (
@@ -21,20 +39,18 @@ export const HomePage = () => {
     )
   return (
     <Center w="100%">
-      <VStack spacing={4} mt="1rem" mb="1rem">
-        {data.me.memories.map((memory, i) => (
-          <Center
-            h="300px"
-            w="600px"
-            border="2px solid"
-            borderColor="main.darkblue"
-            borderRadius="0.5rem"
-            key={`home-memory_${i}`}
-          >
-            <Text>{memory.name}</Text>
-          </Center>
+      <Grid
+        templateColumns="repeat(3, 1fr)"
+        p="3rem"
+        gap={8}
+        mt="1rem"
+        mb="1rem"
+        w="100%"
+      >
+        {data.allMemories.map((memory, i) => (
+          <MemoryCard memory={memory} key={`home-memory_${i}`} />
         ))}
-      </VStack>
+      </Grid>
     </Center>
   )
 }

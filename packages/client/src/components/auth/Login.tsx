@@ -2,11 +2,11 @@ import { Box, Button, Input, useToast, VStack } from '@chakra-ui/react'
 import React, { FC, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
-import loginMutation from '../../graphql/auth/login.graphql'
+import loginMutation from 'graphql/auth/login.graphql'
 import { EMAIL_REG } from '../../constants/regexps'
 import StorageService, { StorageTypes } from '../../services/storage'
-import { isLoggedIn } from '../../graphql/cache'
-import { AuthReturnData } from '../../graphql/graphql.types'
+import { isLoggedIn } from 'graphql/cache'
+import { AuthReturnData } from 'graphql/graphql.types'
 
 interface LoginMutationParams {
   email: string
